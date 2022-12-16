@@ -3,6 +3,7 @@ import { BadRequest } from "@tsed/exceptions";
 import { MongooseModel } from "@tsed/mongoose";
 import { BodyParams } from "@tsed/platform-params";
 import { Post, Returns} from "@tsed/schema";
+import { KeycloakAuth } from "src/decorators/KeycloakAuthDecorator";
 import { SuccessResponseModel } from "src/models/SuccessResponseModel";
 import { WorkflowModel } from "src/models/WorkflowModel";
 
@@ -12,6 +13,7 @@ export class RegisterWorkflowController {
   @Inject(WorkflowModel) private workflowModel: MongooseModel<WorkflowModel>;
 
   @Post("/")
+  @KeycloakAuth()
   @Returns(200, SuccessResponseModel).ContentType("application/json")
   @Returns(400, BadRequest).ContentType("json")
   async registerWorkflow(@BodyParams("dmaID") dmaid: string, @BodyParams("wfID") wfID: string, @BodyParams("wfNonce") wfNonce: string) {

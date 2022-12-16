@@ -13,6 +13,8 @@ import "@tsed/mongoose";
 import {config} from "./config";
 import * as rest from "./controllers/rest";
 import * as pages from "./controllers/pages";
+import { KeycloakService } from "./services/KeycloakService";
+import session from "express-session";
 
 @Configuration({
   ...config,
@@ -57,6 +59,21 @@ export class Server {
   @Inject()
   protected app: PlatformApplication;
 
+  @Inject()
+  protected keycloakService: KeycloakService;
+
   @Configuration()
   protected settings: Configuration;
+
+  $beforeRoutesInit(): void {
+    this.app.use(
+      session({
+        secret: "thisShouldBeLongAndSecret",
+        resave: false,
+        saveUninitialized: true,
+        store: this.keycloakService.getMemoryStore()
+      })
+    );
+    this.app.use(this.keycloakService.getKeycloakInstance().middleware());
+  }
 }
