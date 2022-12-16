@@ -23,7 +23,7 @@ import session from "express-session";
   httpsPort: false, // CHANGE
   componentsScan: false,
   mount: {
-    "/rest": [
+    "/v1/emgmh/rest": [
       ...Object.values(rest)
     ],
     "/": [
@@ -32,7 +32,7 @@ import session from "express-session";
   },
   swagger: [
     {
-      path: "/doc",
+      path: "/v1/emgmh/doc",
       specVersion: "3.0.1"
     }
   ],
